@@ -46,22 +46,30 @@ Split: 80 / 10 / 10 (stratified) → 7,053 train / 882 dev / 882 test
 |--------|-------|----|----------|
 | Majority Baseline | 0.5000 | 0.0000 | — |
 | Method A (XGBoost) | 0.6632 | 0.3333 | 0.2625 |
-| Method B (Semantic Entropy) | 0.6018 | 0.2624 | 0.2049 |
-| Method C (MLP Combined) | — | — | — |
+| Method B (Semantic Entropy) | 0.6041 | 0.2310 | 0.2121 |
+| **Method C (MLP Combined)** | **0.7644** | **0.5756** | **0.4251** |
+
+Method C improves AUROC by **+10.1pp** over the best individual method (A), and F1 by **+24.2pp** — confirming that combining linguistic, entropy, and probability signals captures failure modes that no single method handles alone.
 
 ### Per-Dataset AUROC
 
-| Method | TriviaQA | TruthfulQA |
-|--------|----------|------------|
+| Method | TriviaQA (n=806) | TruthfulQA (n=76) |
+|--------|------------------|-------------------|
 | Method A | 0.6064 | 0.5439 |
-| Method B | 0.6297 | 0.6269 |
+| Method B | 0.6346 | 0.5630 |
 
 Method B outperforms Method A on both datasets individually, even though Method A leads on the aggregate — driven by TriviaQA's dominance (91% of data).
 
-### Error Complementarity
-- **87 cases** where A failed but B succeeded
-- **72 cases** where B failed but A succeeded
-- **181 cases** where both failed → primary target for Method C
+### Error Complementarity (Test Set)
+
+| | Count |
+|--|-------|
+| Both A & B correct | 547 |
+| A wrong, B correct | 82 |
+| B wrong, A correct | 67 |
+| Both wrong | 186 |
+
+**Method C recovers 83 of the 186 cases** where both A and B fail — demonstrating that the combined model learns interaction effects neither component can capture alone. Method C total accuracy: **70.1% (618/882)**.
 
 ---
 
@@ -78,9 +86,9 @@ Method B outperforms Method A on both datasets individually, even though Method 
 
 ```
 llm-hallucination-detector/
-├── llm-hallucination-detector.ipynb   # Full pipeline notebook
-├── metrics_summary.csv              # Aggregate results table
-├── test_results.csv                 # Per-sample predictions
+├── llm-hallucination-detector.ipynb  # Full pipeline notebook
+├── metrics_summary.csv               # Aggregate results table
+├── test_results.csv                  # Per-sample predictions
 └── figures/
     ├── 01_label_distribution.png
     ├── 02_entropy_distribution.png
