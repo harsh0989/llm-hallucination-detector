@@ -3,7 +3,6 @@
 Detecting when a large language model is guessing rather than answering from reliable knowledge — using linguistic signals, semantic consistency, and token-level probabilities.
 
 **CSCI 544 — Natural Language Processing | University of Southern California**  
-*Dhruvi Jodhawat, Harsh Mangukiya, Keshav Mannem, Manvika Satish, Shuban Sridhar*
 
 ---
 
